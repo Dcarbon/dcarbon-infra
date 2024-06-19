@@ -1,0 +1,16 @@
+{
+  "name": "dcarbon-infra",
+  "version": "1.0.0",
+  "main": "index.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1",
+    "prepare": "husky install",
+    "postinstall": "husky install"
+  },
+  "author": "Dcarbon Team",
+  "license": "ISC",
+  "description": "",
+  "devDependencies": {
+    "husky": "^8.0.0"
+  }
+}
