@@ -53,6 +53,30 @@ data "aws_iam_policy_document" "cicd-deployment-policy" {
       "arn:aws:iam::${module.current-account.current_account_id}:role/${var.PROJECT_NAME}-*-ecs-task-execute",
     ]
   }
+  statement {
+    effect = "Allow"
+    actions = [
+      "s3:List*",
+      "s3:Get*",
+      "s3:Describe*",
+    ]
+    resources = ["*"]
+  }
+  statement {
+    effect = "Allow"
+    actions = [
+      "s3:DeleteObject",
+      "s3:PutObject",
+    ]
+    resources = ["arn:aws:s3:::${var.PROJECT_NAME}-*-admin"]
+  }
+  statement {
+    effect = "Allow"
+    actions = [
+      "cloudfront:CreateInvalidation"
+    ]
+    resources = ["arn:aws:cloudfront::${module.current-account.current_account_id}:distribution/*"]
+  }
 }
 module "user-cicd" {
   source               = "../modules/iam/user"

@@ -1,13 +1,13 @@
 data "aws_iam_policy_document" "s3-bucket-policy" {
   statement {
-    actions = [ "s3:GetObject" ]
-    resources = [ var.PUBLIC_GET_RESOURCE ]
+    actions = ["s3:GetObject"]
+    resources = [var.PUBLIC_GET_RESOURCE]
     principals {
       type = "Service"
       identifiers = ["cloudfront.amazonaws.com"]
     }
     condition {
-      test = "StringEquals"
+      test     = "StringEquals"
       variable = "AWS:SourceArn"
       values = [var.CLOUDFRONT_ARN]
     }
@@ -21,19 +21,8 @@ data "aws_iam_policy_document" "s3-bucket-policy" {
     ]
     resources = var.ACCESS_RESOURCES
     principals {
-      type = "AWS"
+      type        = "AWS"
       identifiers = var.ACCESS_RESOURCES_IDENTIFIERS
-    }
-  }
-
-  statement {
-    actions = [
-      "s3:*"
-    ]
-    resources = [var.PUBLIC_GET_RESOURCE]
-    principals {
-      type = "AWS"
-      identifiers = var.FULL_ACCESS_PUBLIC_RESOURCES_IDENTIFIERS
     }
   }
 }

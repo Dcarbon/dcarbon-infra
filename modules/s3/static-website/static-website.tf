@@ -1,22 +1,24 @@
 resource "aws_s3_bucket" "s3-bucket" {
-  bucket = var.BUCKET_NAME
+  bucket        = var.BUCKET_NAME
   force_destroy = var.FORCE_DESTROY
-  tags   = merge({
+  tags = merge({
     Name    = "${var.PROJECT_NAME}-${var.ENV}-${var.PROJECT_SERVICE_TYPE}"
     Service = var.PROJECT_SERVICE_TYPE
   }, var.TAGS)
 }
 resource "aws_s3_bucket_public_access_block" "bucket-public-access" {
   depends_on = [aws_s3_bucket.s3-bucket]
-  bucket     = aws_s3_bucket.s3-bucket.id
+  bucket = aws_s3_bucket.s3-bucket.id
 
   block_public_acls   = false
   block_public_policy = false
 }
 resource "aws_s3_bucket_policy" "bucket-policy" {
   depends_on = [aws_s3_bucket_public_access_block.bucket-public-access]
-  bucket     = aws_s3_bucket.s3-bucket.id
-  policy     = templatefile("${path.module}/templates/s3-policy-t1.json", { BUCKET_NAME = var.BUCKET_NAME })
+  bucket = aws_s3_bucket.s3-bucket.id
+  policy = templatefile("${path.module}/templates/s3-policy.json", {
+    BUCKET_NAME = var.BUCKET_NAME, USER_CICD = var.USER_CICD
+  })
 }
 resource "aws_s3_bucket_website_configuration" "bucket-website-config" {
   bucket = aws_s3_bucket.s3-bucket.id
@@ -34,7 +36,7 @@ resource "null_resource" "upload-to-s3" {
   depends_on = [aws_s3_bucket.s3-bucket]
   provisioner "local-exec" {
     interpreter = ["/bin/bash", "-c"]
-    command     = <<EOF
+    command = <<EOF
        AWS_ACCESS_KEY_ID=${var.AWS_ACCESS_KEY} AWS_SECRET_ACCESS_KEY=${var.AWS_SECRET_KEY} AWS_REGION=${var.AWS_REGION} aws s3 cp ${var.SOURCE_PATH} s3://${var.BUCKET_NAME}/ --recursive
     EOF
   }

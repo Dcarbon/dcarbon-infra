@@ -17,7 +17,3 @@ variable "ACCESS_RESOURCES" {
 variable "ACCESS_RESOURCES_IDENTIFIERS" {
   type = list(string)
 }
-
-variable "FULL_ACCESS_PUBLIC_RESOURCES_IDENTIFIERS" {
-  type = list(string)
-}

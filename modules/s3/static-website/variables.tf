@@ -41,3 +41,7 @@ variable "MIME_TYPES" {
 variable "FORCE_DESTROY" {
   default = false
 }
+
+variable "USER_CICD" {
+  type = string
+}
