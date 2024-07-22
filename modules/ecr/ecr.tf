@@ -4,7 +4,7 @@ resource "aws_ecr_repository" "main-ecr" {
   force_delete = var.FORCE_DELETE
   tags         = merge({
     Name    = "${var.PROJECT_NAME}-${var.ENV}-${var.PROJECT_SERVICE_TYPE}-ecr"
-    Service = var.PROJECT_SERVICE_TYPE
+    service = var.PROJECT_SERVICE_TYPE
   }, var.TAGS)
 }
 resource "null_resource" "build-image" {

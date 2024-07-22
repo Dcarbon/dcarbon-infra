@@ -15,6 +15,6 @@ resource "aws_service_discovery_service" "discovery-service" {
 
   tags = merge({
     Name    = "${var.PROJECT_NAME}-${var.ENV}-${var.PROJECT_SERVICE_TYPE}"
-    Service = var.PROJECT_SERVICE_TYPE
+    service = var.PROJECT_SERVICE_TYPE
   }, var.TAGS)
 }

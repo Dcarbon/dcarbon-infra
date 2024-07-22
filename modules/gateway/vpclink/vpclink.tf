@@ -5,6 +5,6 @@ resource "aws_apigatewayv2_vpc_link" "vpclink" {
 
   tags   = merge({
     Name    = "${var.PROJECT_NAME}-${var.ENV}-${var.PROJECT_SERVICE_TYPE}"
-    Service = var.PROJECT_SERVICE_TYPE
+    service = var.PROJECT_SERVICE_TYPE
   }, var.TAGS)
 }

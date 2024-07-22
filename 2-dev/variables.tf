@@ -41,7 +41,9 @@ variable PROJECT_SERVICES {
     SNAPSHOT : "lambda-snapshot"
     SNAPSHOT_SORT : "snapshot"
     ADMIN : "admin"
+    ADMIN_PO : "po"
     BACKEND_ADMIN : "admin-backend"
+    BACKEND_PO : "po-backend"
     RPC : "rpc"
   }
 }
@@ -52,6 +54,9 @@ variable "VPC" {
     PUBLIC_SUBNETS : list(string)
     PRIVATE_SUBNETS : list(string)
   })
+}
+variable "IP_WHITE_LIST" {
+  type = list(string)
 }
 variable "BACKEND_ENV" {
   type = list(any)
@@ -78,4 +83,30 @@ variable "AWS_USER_DEPLOYMENT" {
 
 variable "RPC_DOMAIN" {
   type = string
+}
+variable "DMARC_RECORD" {
+  type = string
+}
+variable "ADMIN_BACKEND_ENV_SSM" {
+  type = any
+}
+variable "PO_BACKEND_ENV_SSM" {
+  type = any
+}
+variable "BACKEND_ENV_SSM" {
+  type = any
+}
+variable "DATABASE_ADMIN_AUTH" {
+  type = object({
+    username : string
+    password : string
+  })
+  sensitive = true
+}
+variable "DATABASE_OWNER_AUTH" {
+  type = object({
+    username : string
+    password : string
+  })
+  sensitive = true
 }

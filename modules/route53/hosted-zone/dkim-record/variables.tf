@@ -13,3 +13,11 @@ variable "DKIM_TOKENS" {
 variable "DOMAIN" {
   type = string
 }
+
+variable "DMARC_RECORD" {
+  type = string
+}
+
+variable "ROOT_DOMAIN" {
+  type = string
+}

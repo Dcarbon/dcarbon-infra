@@ -82,5 +82,5 @@ module "frontend-ecs-service" {
   TAGS = merge({
     Schedule : var.ENV == "dev" ? "on" : "off"
   }, local.common-tags)
-  WAIT_FOR_STEADY_STATE = true
+#   WAIT_FOR_STEADY_STATE = true
 }

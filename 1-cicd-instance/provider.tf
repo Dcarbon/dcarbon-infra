@@ -1,17 +1,18 @@
 provider "aws" {
-  access_key = var.AWS_ACCESS_KEY
-  secret_key = var.AWS_SECRET_KEY
-  region     = var.AWS_REGION
+  access_key        = var.AWS_ACCESS_KEY
+  secret_key        = var.AWS_SECRET_KEY
+  region            = var.AWS_REGION
+  s3_use_path_style = true
 }
 
 provider "aws" {
-  alias = "us-east-1-provider"
+  alias      = "us-east-1-provider"
   access_key = var.AWS_ACCESS_KEY
   secret_key = var.AWS_SECRET_KEY
   region     = "us-east-1"
 }
 provider "aws" {
-  alias = "route53-provider"
+  alias      = "route53-provider"
   access_key = var.AWS_ACCESS_KEY_ROUTE53
   secret_key = var.AWS_SECRET_KEY_ROUTE53
   region     = var.AWS_REGION

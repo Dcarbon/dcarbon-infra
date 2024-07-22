@@ -50,6 +50,6 @@ resource "aws_cloudfront_distribution" "s3-oac-distribution" {
   }
 
   tags  = merge({
-    Service = var.PROJECT_SERVICE_TYPE
+    service = var.PROJECT_SERVICE_TYPE
   }, var.TAGS)
 }

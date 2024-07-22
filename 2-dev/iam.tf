@@ -55,6 +55,13 @@ data "aws_iam_policy_document" "user-application-policy" {
     ]
     resources = [module.common-upload-bucket.s3-bucket-arn]
   }
+  statement {
+    effect  = "Allow"
+    actions = [
+      "ses:SendEmail"
+    ]
+    resources = ["arn:aws:ses:${var.AWS_REGION}:${module.current-account.current_account_id}:identity/*"]
+  }
 }
 module "user-application" {
   source               = "../modules/iam/user"

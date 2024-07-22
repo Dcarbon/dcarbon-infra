@@ -3,7 +3,7 @@ resource "aws_s3_bucket" "s3-bucket" {
   force_destroy = var.FORCE_DESTROY
   tags          = merge({
     Name    = "${var.PROJECT_NAME}-${var.ENV}-${var.PROJECT_SERVICE_TYPE}"
-    Service = var.PROJECT_SERVICE_TYPE
+    service = var.PROJECT_SERVICE_TYPE
   }, var.TAGS)
 }
 resource "aws_s3_bucket_public_access_block" "bucket-public-access" {

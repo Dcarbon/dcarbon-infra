@@ -47,6 +47,6 @@ resource "aws_cloudfront_distribution" "s3-static-website-distribution" {
   }
   web_acl_id = var.WAF_ID
   tags  = merge({
-    Service = var.PROJECT_SERVICE_TYPE
+    service = var.PROJECT_SERVICE_TYPE
   }, var.TAGS)
 }

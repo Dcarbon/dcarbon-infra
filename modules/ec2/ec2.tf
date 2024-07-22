@@ -38,7 +38,7 @@ resource "aws_instance" "ec2-instance" {
 
   tags         = merge({
     Name    = "${var.PROJECT_NAME}-${var.ENV}-${var.PROJECT_SERVICE_TYPE}"
-    Service = var.PROJECT_SERVICE_TYPE
+    service = var.PROJECT_SERVICE_TYPE
   }, var.TAGS)
 
 #  provisioner "local-exec" {

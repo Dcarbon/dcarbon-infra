@@ -11,7 +11,7 @@ resource "aws_iam_role" "main-iam-role" {
     }
   }
   tags = merge({
-    Service = var.PROJECT_SERVICE_TYPE
+    service = var.PROJECT_SERVICE_TYPE
   }, var.TAGS)
 }
 resource "aws_iam_role_policy_attachment" "main-iam-role-attach" {

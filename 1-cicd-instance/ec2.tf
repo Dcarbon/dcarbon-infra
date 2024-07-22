@@ -35,34 +35,13 @@ module "cicd-ec2-security-group" {
   }
   TAGS = local.common-tags
 }
-module "cicd-ec2" {
-  depends_on = [module.cicd-ec2-security-group, module.create-deploy-backend-env-file]
-  source                = "../modules/ec2"
-  PROJECT_NAME          = var.PROJECT_NAME
-  PROJECT_SERVICE_TYPE  = var.PROJECT_SERVICES.CICD
-  ENV                   = var.ENV
-  TAGS = merge(local.common-tags, { schedule : "on" })
-  KEY_NAME              = "${var.PROJECT_NAME}-${var.ENV}-${var.PROJECT_SERVICES.CICD}-key"
-  INSTANCE_TYPE         = "t3.medium"
-  SCRIPT_FILE_NAME      = "script_cicd.sh"
-  SOURCE_FILE_NAME      = "env"
-  KEY_PATH              = "${path.module}/../keys"
-  SUBNET_ID             = var.VPC.PUBLIC_SUBNETS[0]
-  SECURITY_GROUPS = [module.cicd-ec2-security-group.security-group-id]
-  AMI                   = local.AMIS[var.AWS_REGION]
-  VOLUME_TYPE           = "gp3"
-  VOLUME_SIZE           = 50
-  DELETE_ON_TERMINATION = true
-}
-
 module "cicd-ec2-eip" {
-  depends_on = [module.cicd-ec2]
   source               = "../modules/eip"
   PROJECT_NAME         = var.PROJECT_NAME
   PROJECT_SERVICE_TYPE = var.PROJECT_SERVICES.CICD
   ENV                  = var.ENV
   TAGS                 = local.common-tags
-  INSTANCE             = module.cicd-ec2.ec2-instance-id
+  INSTANCE             = var.INSTANCE_ID
 }
 module "cicd-ec2-route53-record" {
   depends_on = [module.cicd-ec2-eip]
@@ -75,15 +54,15 @@ module "cicd-ec2-route53-record" {
     aws = aws.route53-provider
   }
 }
-module "create-deploy-backend-env-file" {
-  source             = "../modules/common/create_file"
-  FILE_PATH          = "${path.cwd}/../modules/ec2/env/${var.ENV}/${var.PROJECT_SERVICES.COMMON}/.env.deploy"
-  TEMPLATE_FILE_NAME = "${var.PROJECT_SERVICES.BACKEND}/env.deploy.tpl"
-  APP_ENV = {
-    AWS_ACCESS_KEY : module.user-cicd.access-key
-    AWS_SECRET_KEY : module.user-cicd.secret-key
-    AWS_REGION : var.AWS_REGION
-    AWS_FAMILY : "${module.current-account.current_account_id}.dkr.ecr.${var.AWS_REGION}.amazonaws.com"
-    PROJECT_NAME : var.PROJECT_NAME
-  }
-}
+# module "create-deploy-backend-env-file" {
+#   source             = "../modules/common/create_file"
+#   FILE_PATH          = "${path.cwd}/../modules/ec2/env/${var.ENV}/${var.PROJECT_SERVICES.COMMON}/.env.deploy"
+#   TEMPLATE_FILE_NAME = "${var.PROJECT_SERVICES.BACKEND}/env.deploy.tpl"
+#   APP_ENV = {
+#     AWS_ACCESS_KEY : module.user-cicd.access-key
+#     AWS_SECRET_KEY : module.user-cicd.secret-key
+#     AWS_REGION : var.AWS_REGION
+#     AWS_FAMILY : "${module.current-account.current_account_id}.dkr.ecr.${var.AWS_REGION}.amazonaws.com"
+#     PROJECT_NAME : var.PROJECT_NAME
+#   }
+# }

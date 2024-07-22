@@ -25,12 +25,7 @@ module "common-upload-bucket" {
   USE_BUCKET_CORS = true
   ALLOWED_HEADERS = ["*"]
   ALLOWED_METHODS = ["GET", "POST", "PUT"]
-  ALLOWED_ORIGINS = [
-    "https://${local.frontend-domain}",
-    "https://${local.admin-domain-name}",
-    "https://localhost:3000",
-    "http://localhost:3000",
-  ]
+  ALLOWED_ORIGINS = ["*"]
   EXPOSE_HEADERS = [
     "ETag",
     "Access-Control-Allow-Origin",
@@ -98,5 +93,21 @@ module "s3-oac-policy" {
   ACCESS_RESOURCES = [
     "${module.common-upload-bucket.s3-bucket-arn}", "${module.common-upload-bucket.s3-bucket-arn}/*"
   ]
-  ACCESS_RESOURCES_IDENTIFIERS = [module.user-application.user-arn]
+  ACCESS_RESOURCES_IDENTIFIERS = [module.user-application.user-arn, module.common-role.ecs-task-execute-role-arn]
+}
+module "s3-put-email-images" {
+  depends_on = [module.admin-s3-static-website]
+  source      = "../modules/s3/upload"
+  BUCKET_ID   = module.common-upload-bucket.s3-bucket-id
+  KEY         = ""
+  SOURCE_PATH = "files/public/files/email/images"
+  MIME_TYPES  = local.mime_types
+}
+module "s3-put-project-default-images" {
+  depends_on = [module.admin-s3-static-website]
+  source      = "../modules/s3/upload"
+  BUCKET_ID   = module.common-upload-bucket.s3-bucket-id
+  KEY         = ""
+  SOURCE_PATH = "files/public/files/project/images/default"
+  MIME_TYPES  = local.mime_types
 }

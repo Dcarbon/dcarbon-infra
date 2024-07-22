@@ -31,4 +31,6 @@ module "ses-dkim-record" {
   providers = {
     aws = aws.route53-provider
   }
+  DMARC_RECORD = var.DMARC_RECORD
+  ROOT_DOMAIN  = var.CERT_DOMAIN
 }

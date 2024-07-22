@@ -16,6 +16,6 @@ resource "aws_default_security_group" "default" {
 
   tags = merge({
     Name    = var.SECURITY_GROUP_NAME
-    Service = var.PROJECT_SERVICE_TYPE
+    service = var.PROJECT_SERVICE_TYPE
   }, var.TAGS)
 }

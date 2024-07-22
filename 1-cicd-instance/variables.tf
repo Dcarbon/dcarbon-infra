@@ -48,3 +48,6 @@ variable "ROUTE53_HOSTED_ZONE" {
 variable "CERT_DOMAIN" {
   type = string
 }
+variable "INSTANCE_ID" {
+  type = string
+}

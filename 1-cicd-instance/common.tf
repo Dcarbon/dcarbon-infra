@@ -1,8 +1,9 @@
 locals {
   common-tags = {
-    Terraform = "true"
-    Prj       = var.PROJECT_NAME
-    Env       = var.ENV
+    terraform = "true"
+    prj       = var.PROJECT_NAME
+    env       = var.ENV
+    cus       = var.PROJECT_NAME
   }
 }
 module "current-account" {

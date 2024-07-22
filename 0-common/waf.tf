@@ -1,7 +1,9 @@
 locals {
   waf-common-tags = {
-    Terraform = "true"
-    Prj       = var.PROJECT_NAME
+    terraform = "true"
+    prj       = var.PROJECT_NAME
+    env       = "all"
+    cus       = var.PROJECT_NAME
   }
 }
 module "ipv4-white-list" {
