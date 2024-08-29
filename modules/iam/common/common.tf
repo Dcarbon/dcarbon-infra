@@ -120,7 +120,7 @@ resource "aws_iam_role" "ecs-task-execute" {
             "ssm:GetParameter",
           ],
           "Resource" : [
-            "arn:aws:ssm:${var.AWS_REGION}:${var.AWS_ACCOUNT_ID}:parameter/${var.PROJECT_NAME}/*",
+            "arn:aws:ssm:${var.AWS_REGION}:${var.AWS_ACCOUNT_ID}:parameter/${var.PROJECT_NAME}/${var.ENV}/*",
           ]
         }
       ]

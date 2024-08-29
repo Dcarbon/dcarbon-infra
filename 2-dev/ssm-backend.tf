@@ -34,6 +34,12 @@ module "ssm-backend" {
       type : var.BACKEND_ENV_SSM.COMMON_ADMIN_API_SECRET.type
       value : var.BACKEND_ENV_SSM.COMMON_ADMIN_API_SECRET.value
     },
+    (var.BACKEND_ENV_SSM.ENDPOINT_RPC.name) : {
+      name : "/${var.PROJECT_NAME}/${var.ENV}/${var.PROJECT_SERVICES.BACKEND}/${lower(split("_", var.BACKEND_ENV_SSM.ENDPOINT_RPC.name)[0])}/${lower(var.BACKEND_ENV_SSM.ENDPOINT_RPC.name)}",
+      description : var.BACKEND_ENV_SSM.ENDPOINT_RPC.description,
+      type : var.BACKEND_ENV_SSM.ENDPOINT_RPC.type
+      value : var.BACKEND_ENV_SSM.ENDPOINT_RPC.value
+    },
   }
   TAGS = local.common-tags
 }

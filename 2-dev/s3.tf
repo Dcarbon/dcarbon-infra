@@ -93,7 +93,7 @@ module "s3-oac-policy" {
   ACCESS_RESOURCES = [
     "${module.common-upload-bucket.s3-bucket-arn}", "${module.common-upload-bucket.s3-bucket-arn}/*"
   ]
-  ACCESS_RESOURCES_IDENTIFIERS = [module.user-application.user-arn, module.common-role.ecs-task-execute-role-arn]
+  ACCESS_RESOURCES_IDENTIFIERS = [module.user-application.user-arn, module.common-role.ecs-task-execute-role-arn, module.backend-admin-ecs-task-execute-role.role-arn]
 }
 module "s3-put-email-images" {
   depends_on = [module.admin-s3-static-website]
@@ -109,5 +109,29 @@ module "s3-put-project-default-images" {
   BUCKET_ID   = module.common-upload-bucket.s3-bucket-id
   KEY         = ""
   SOURCE_PATH = "files/public/files/project/images/default"
+  MIME_TYPES  = local.mime_types
+}
+module "s3-put-metadata-token-images" {
+  depends_on = [module.admin-s3-static-website]
+  source      = "../modules/s3/upload"
+  BUCKET_ID   = module.common-upload-bucket.s3-bucket-id
+  KEY         = ""
+  SOURCE_PATH = "files/public/files/metadata/token"
+  MIME_TYPES  = local.mime_types
+}
+module "s3-put-feedback-images" {
+  depends_on = [module.admin-s3-static-website]
+  source      = "../modules/s3/upload"
+  BUCKET_ID   = module.common-upload-bucket.s3-bucket-id
+  KEY         = ""
+  SOURCE_PATH = "files/public/files/feedback"
+  MIME_TYPES  = local.mime_types
+}
+module "s3-put-token-images" {
+  depends_on = [module.admin-s3-static-website]
+  source      = "../modules/s3/upload"
+  BUCKET_ID   = module.common-upload-bucket.s3-bucket-id
+  KEY         = ""
+  SOURCE_PATH = "files/public/files/token"
   MIME_TYPES  = local.mime_types
 }

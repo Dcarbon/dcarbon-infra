@@ -45,6 +45,18 @@ module "ssm-po-backend" {
       description : var.PO_BACKEND_ENV_SSM.COMMON_ADMIN_API_SECRET.description,
       type : var.PO_BACKEND_ENV_SSM.COMMON_ADMIN_API_SECRET.type
       value : var.PO_BACKEND_ENV_SSM.COMMON_ADMIN_API_SECRET.value
+    },
+    (var.PO_BACKEND_ENV_SSM.JWT_DCARBON_ACCESS_TOKEN_SECRET.name) : {
+      name : "/${var.PROJECT_NAME}/${var.ENV}/${var.PROJECT_SERVICES.BACKEND_PO}/${lower(split("_", var.PO_BACKEND_ENV_SSM.JWT_DCARBON_ACCESS_TOKEN_SECRET.name)[0])}/${lower(var.PO_BACKEND_ENV_SSM.JWT_DCARBON_ACCESS_TOKEN_SECRET.name)}",
+      description : var.PO_BACKEND_ENV_SSM.JWT_DCARBON_ACCESS_TOKEN_SECRET.description,
+      type : var.PO_BACKEND_ENV_SSM.JWT_DCARBON_ACCESS_TOKEN_SECRET.type
+      value : var.PO_BACKEND_ENV_SSM.JWT_DCARBON_ACCESS_TOKEN_SECRET.value
+    },
+    (var.PO_BACKEND_ENV_SSM.ENDPOINT_RPC.name) : {
+      name : "/${var.PROJECT_NAME}/${var.ENV}/${var.PROJECT_SERVICES.BACKEND_PO}/${lower(split("_", var.PO_BACKEND_ENV_SSM.ENDPOINT_RPC.name)[0])}/${lower(var.PO_BACKEND_ENV_SSM.ENDPOINT_RPC.name)}",
+      description : var.PO_BACKEND_ENV_SSM.ENDPOINT_RPC.description,
+      type : var.PO_BACKEND_ENV_SSM.ENDPOINT_RPC.type
+      value : var.PO_BACKEND_ENV_SSM.ENDPOINT_RPC.value
     }
   }
   TAGS = local.common-tags

@@ -13,26 +13,14 @@ variable "PROJECT_SERVICE_TYPE" {
 variable "TAGS" {
   type = map(string)
 }
-
 variable "NAME" {
   type = string
 }
 
-variable "PATH" {
-  default = "/"
-}
-
-variable "FORCE_DESTROY" {
-  default = false
+variable "DESCRIPTION" {
+  type = string
 }
 
 variable "POLICY" {
   type = any
-}
-variable "POLICY2" {
-  default = null
-}
-
-variable "POLICY_NAME" {
-  type = string
 }

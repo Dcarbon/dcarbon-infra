@@ -8,6 +8,64 @@ locals {
     target-group-health-check-path = "/v1/common/health-check"
   }
 }
+module "backend-admin-ecs-task-execute-role" {
+  source               = "../modules/ecs/execute-role"
+  ENV                  = var.ENV
+  PROJECT_NAME         = var.PROJECT_NAME
+  PROJECT_SERVICE_TYPE = var.PROJECT_SERVICES.BACKEND_ADMIN
+  TAGS                 = local.common-tags
+  NAME                 = "${var.PROJECT_NAME}-${var.ENV}-admin-ecs-task-execute"
+  DESCRIPTION          = "Allows ECS tasks to call AWS services on your behalf."
+  POLICY = jsonencode({
+    "Version" : "2012-10-17",
+    "Statement" : [
+      {
+        "Effect" : "Allow",
+        "Action" : [
+          "logs:CreateLogGroup",
+          "logs:DescribeLogStreams"
+        ],
+        "Resource" : [
+          "arn:aws:logs:*:*:*"
+        ]
+      },
+      {
+        "Effect" : "Allow",
+        Action : [
+          "ses:SendEmail"
+        ]
+        Resource : ["arn:aws:ses:${var.AWS_REGION}:${module.current-account.current_account_id}:identity/*"]
+      },
+      {
+        "Effect" : "Allow",
+        "Action" : [
+          "ssm:GetParameters",
+          "ssm:GetParameter",
+        ],
+        "Resource" : [
+          "arn:aws:ssm:${var.AWS_REGION}:${module.current-account.current_account_id}:parameter/${var.PROJECT_NAME}/*",
+        ]
+      }, {
+        "Effect" : "Allow",
+        "Action" : [
+          "secretsmanager:CreateSecret"
+        ],
+        "Resource" : [
+          "arn:aws:secretsmanager:${var.AWS_REGION}:${module.current-account.current_account_id}:secret:${var.PROJECT_NAME}/${var.ENV}/mint_signer/*"
+        ]
+      },
+      {
+        "Effect" : "Allow",
+        "Action" : [
+          "secretsmanager:GetSecretValue"
+        ],
+        "Resource" : [
+          "arn:aws:secretsmanager:${var.AWS_REGION}:${module.current-account.current_account_id}:secret:${var.PROJECT_NAME}/${var.ENV}/arweave_secret"
+        ]
+      }
+    ]
+  })
+}
 module "backend-admin-ecr" {
   source                = "../modules/ecr"
   depends_on = [module.current-account]
@@ -26,14 +84,14 @@ module "backend-admin-ecr" {
 module "backend-admin-task-definition" {
   source = "../modules/task-definition"
   depends_on = [
-    module.current-account, module.common-role, module.backend-admin-ecr
+    module.current-account, module.backend-admin-ecs-task-execute-role, module.backend-admin-ecr
   ]
   AWS_ACCOUNT_ID            = module.current-account.current_account_id
   ENV                       = var.ENV
   PROJECT_NAME              = var.PROJECT_NAME
   PROJECT_SERVICE_TYPE      = var.PROJECT_SERVICES.BACKEND_ADMIN
   AWS_REGION                = var.AWS_REGION
-  ECS_TASK_EXECUTE_ROLE_ARN = module.common-role.ecs-task-execute-role-arn
+  ECS_TASK_EXECUTE_ROLE_ARN = module.backend-admin-ecs-task-execute-role.role-arn
   TASK_MEMORY_SIZE          = "1024"
   REQUIRES_COMPATIBILITIES = ["FARGATE"]
   CPU_SIZE                  = "512"
@@ -82,5 +140,5 @@ module "backend-admin-ecs-service" {
   TAGS = merge({
     Schedule : var.ENV == "dev" ? "on" : "off"
   }, local.common-tags)
-#   WAIT_FOR_STEADY_STATE = true
+  #   WAIT_FOR_STEADY_STATE = true
 }

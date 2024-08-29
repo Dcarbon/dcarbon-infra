@@ -38,8 +38,7 @@ variable PROJECT_SERVICES {
     BACKEND : "backend"
     FRONTEND : "frontend"
     FRONTEND_APP : "frontend-app"
-    SNAPSHOT : "lambda-snapshot"
-    SNAPSHOT_SORT : "snapshot"
+    MINTING : "lambda-minting"
     ADMIN : "admin"
     ADMIN_PO : "po"
     BACKEND_ADMIN : "admin-backend"
@@ -109,4 +108,8 @@ variable "DATABASE_OWNER_AUTH" {
     password : string
   })
   sensitive = true
+}
+
+variable "ARWEAVE_SECRET" {
+  type = any
 }

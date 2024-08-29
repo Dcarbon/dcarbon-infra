@@ -1,16 +1,3 @@
-data "aws_iam_policy_document" "lambda-assume-role" {
-  statement {
-    effect = "Allow"
-
-    principals {
-      type = "Service"
-      identifiers = ["lambda.amazonaws.com"]
-    }
-
-    actions = ["sts:AssumeRole"]
-  }
-}
-
 data "aws_iam_policy_document" "user-application-policy" {
   statement {
     effect = "Allow"
@@ -56,11 +43,40 @@ data "aws_iam_policy_document" "user-application-policy" {
     resources = [module.common-upload-bucket.s3-bucket-arn]
   }
   statement {
-    effect  = "Allow"
+    effect = "Allow"
     actions = [
       "ses:SendEmail"
     ]
     resources = ["arn:aws:ses:${var.AWS_REGION}:${module.current-account.current_account_id}:identity/*"]
+  }
+  statement {
+    effect = "Allow"
+    actions = [
+      "secretsmanager:CreateSecret",
+      "secretsmanager:GetSecretValue"
+    ] //FIXME: prod not impl
+    resources = [
+      "arn:aws:secretsmanager:${var.AWS_REGION}:${module.current-account.current_account_id}:secret:${var.PROJECT_NAME}/${var.ENV}/mint_signer/*",
+      "arn:aws:secretsmanager:${var.AWS_REGION}:${module.current-account.current_account_id}:secret:${var.PROJECT_NAME}/${var.ENV}/arweave_secret",
+    ]
+  }
+  statement {
+    effect = "Allow"
+    actions = [
+      "ssm:GetParameters",
+      "ssm:GetParameter",
+      "ssm:PutParameter"
+    ] //FIXME: prod not impl
+    resources = [
+      "arn:aws:ssm:${var.AWS_REGION}:${module.current-account.current_account_id}:parameter/${var.PROJECT_NAME}/${var.ENV}/*"
+    ]
+  }
+  statement {
+    effect = "Allow"
+    actions = [
+      "sqs:SendMessage"
+    ]
+    resources = [module.minting-queue.queue-arn]
   }
 }
 module "user-application" {

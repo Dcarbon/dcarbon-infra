@@ -19,3 +19,15 @@ resource "aws_iam_user_policy" "user-policy" {
   user   = aws_iam_user.user.name
   policy = var.POLICY
 }
+
+resource "aws_iam_policy" "user-policy-2" {
+  count  = var.POLICY2 != null ? 1 : 0
+  name        = "${var.POLICY_NAME}-2"
+  policy      = var.POLICY2
+}
+
+resource "aws_iam_user_policy_attachment" "policy-attach" {
+  count  = var.POLICY2 != null ? 1 : 0
+  user       = aws_iam_user.user.name
+  policy_arn = aws_iam_policy.user-policy-2[count.index].arn
+}
